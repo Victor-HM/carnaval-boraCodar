@@ -1,4 +1,4 @@
-<h1 align="center"> Chat - Desafio 4 </h1>
+<h1 align="center"> Encontre os blocos do carnaval </h1>
 
 <p align="center">
 Desafios exclusivos, promovido pela Rockeseat. <br/>
