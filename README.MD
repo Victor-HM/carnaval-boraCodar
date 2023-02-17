@@ -1,4 +1,4 @@
-<h1 align="center"> Chat - Desafio 4 </h1>
+<h1 align="center"> Encontre os blocos do carnaval </h1>
 
 <p align="center">
 Desafios exclusivos, promovido pela Rockeseat. <br/>
@@ -13,7 +13,7 @@ Desafios exclusivos, promovido pela Rockeseat. <br/>
 <p align="center" width='100%'>
 
   <h3 align='center'>Web</h3>
-  <img alt="projeto Challenger 4" src=".github/preview.png" width="100%">
+  <img alt="projeto Challenger bora codar" src=".github/preview.png" width="100%">
 
 </p>
 
@@ -23,8 +23,9 @@ Desafios exclusivos, promovido pela Rockeseat. <br/>
 
 ## 👨🏼‍💻 Funções
 
- - Filtrar por nome (Futura atualização)
- - Filtrar por cidade (Futura atualização)
+ - Filtrar por nome 
+ - Filtrar por cidade
+ - Adicionar mapa para a cidade selecionada (futura atualização)
 
 ## 🚀 Tecnologias
 

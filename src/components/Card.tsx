@@ -14,7 +14,7 @@ export function Card({ image, location, subtitle, title, city }: CardProps) {
    <div className="">
     <img src={image} alt="Imagem do carnaval" className="w-full" />
    </div>
-   <div className="flex flex-col gap-4 px-4">
+   <div className="h-full flex flex-col justify-between gap-4 px-4">
     <span className="font-bold text-lg">{title}</span>
     <p className="text-base opacity-90">{subtitle}</p>
     <div className="flex items-center gap-3">

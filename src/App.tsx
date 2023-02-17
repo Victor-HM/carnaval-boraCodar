@@ -11,14 +11,13 @@ import Image8 from "./assets/unsplash_b2jkMC95a_8 (7).png";
 import Image9 from "./assets/unsplash_b2jkMC95a_8 (8).png";
 
 import { MagnifyingGlass, MapPin } from "phosphor-react";
-import { FormEvent } from "react";
+import { FormEvent, useState } from "react";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { Select } from "./components/Select";
 import { Card, CardProps } from "./components/Card";
 
 function App() {
-
   const blocksRequest: CardProps[] = [
     {
       image: Image1,
@@ -94,11 +93,30 @@ function App() {
     },
   ];
 
+  const [nameBlock, setNameBlock] = useState<string>("");
+  const [selectCity, setSelectCity] = useState<string>("");
+  const [filteredBlock, setFilteredBlock] = useState<CardProps[]>([]);
+
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     const e = event.target as HTMLInputElement;
-  }
 
+    function verifyBlocks(value: CardProps) {
+      if (value.title.includes(nameBlock) && value.city.includes(selectCity)) {
+        return value;
+      } else {
+        return false
+      }
+    }
+
+    setFilteredBlock(
+      nameBlock.length > 0 || selectCity.length > 0
+        ? blocksRequest.filter(verifyBlocks)
+        : []
+    );
+
+  }
+  
   return (
     <div className="flex flex-col gap-24">
       <div className="flex justify-center items-center py-24 px-40 border-2 relative">
@@ -118,17 +136,24 @@ function App() {
             </div>
           </div>
 
-          <form className="bg-white flex gap-6 drop-shadow-lg p-10">
+          <form className="bg-white flex gap-6 drop-shadow-lg p-10 rounded-md">
             <Input
               placeholder="Pesquise por nome"
               icon={<MagnifyingGlass size={24} />}
+              onChange={(e) => setNameBlock(e.target.value)}
             />
             <Select
               values={[
                 { name: "Selecione uma cidade", value: "" },
-                { name: "São Paulo", value: "SP" },
+                { name: "São Paulo", value: "São Paulo" },
+                { name: "Florianópolis", value: "Florianópolis" },
+                { name: "Curitiba", value: "Curitiba" },
+                { name: "Salvador", value: "Salvador" },
+                { name: "Rio de Janeiro", value: "Rio de Janeiro" },
+                { name: "Porto Alegre", value: "Porto Alegre" },
               ]}
               icon={<MapPin size={24} />}
+              onChange={(e) => setSelectCity(e.target.value)}
             />
             <Button
               placeholder="BUSCAR AGORA"
@@ -160,16 +185,27 @@ function App() {
         </div>
 
         <div className="grid grid-cols-3 grid-rows-[auto] gap-8">
-          {blocksRequest.map((arr, index) => (
-            <Card
-              city={arr.city}
-              image={arr.image}
-              location={arr.location}
-              subtitle={arr.subtitle}
-              title={arr.title}
-              key={index}
-            />
-          ))}
+          {filteredBlock.length > 0
+            ? filteredBlock.map((arr, index) => (
+                <Card
+                  city={arr.city}
+                  image={arr.image}
+                  location={arr.location}
+                  subtitle={arr.subtitle}
+                  title={arr.title}
+                  key={index}
+                />
+              ))
+            : blocksRequest.map((arr, index) => (
+                <Card
+                  city={arr.city}
+                  image={arr.image}
+                  location={arr.location}
+                  subtitle={arr.subtitle}
+                  title={arr.title}
+                  key={index}
+                />
+              ))}
         </div>
       </div>
     </div>
