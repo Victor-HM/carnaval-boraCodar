@@ -25,7 +25,8 @@ Desafios exclusivos, promovido pela Rockeseat. <br/>
 
  - Filtrar por nome 
  - Filtrar por cidade
- - Adicionar mapa para a cidade selecionada (futura atualização)
+ - Mapa funcionando
+ - Adicionar localização para a cidade selecionada (futura atualização)
 
 ## 🚀 Tecnologias
 
