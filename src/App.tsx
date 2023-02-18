@@ -16,6 +16,8 @@ import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { Select } from "./components/Select";
 import { Card, CardProps } from "./components/Card";
+import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import { ListCard } from "./components/ListCards";
 
 function App() {
   const blocksRequest: CardProps[] = [
@@ -96,16 +98,20 @@ function App() {
   const [nameBlock, setNameBlock] = useState<string>("");
   const [selectCity, setSelectCity] = useState<string>("");
   const [filteredBlock, setFilteredBlock] = useState<CardProps[]>([]);
+  const [isOpenMap, setIsOpenMap] = useState<boolean>(false);
 
   function onSubmit(event: FormEvent) {
     event.preventDefault();
     const e = event.target as HTMLInputElement;
 
     function verifyBlocks(value: CardProps) {
-      if (value.title.includes(nameBlock) && value.city.includes(selectCity)) {
+      if (
+        value.title.toUpperCase().includes(nameBlock.toUpperCase()) &&
+        value.city.includes(selectCity)
+      ) {
         return value;
       } else {
-        return false
+        return false;
       }
     }
 
@@ -114,12 +120,21 @@ function App() {
         ? blocksRequest.filter(verifyBlocks)
         : []
     );
-
   }
-  
+
+  const { isLoaded } = useJsApiLoader({
+    id: "google-map-script",
+    googleMapsApiKey: import.meta.env.VITE_KEY_API,
+  });
+
+  const position = {
+    lat: -23.596336,
+    lng: -46.435725,
+  };
+
   return (
-    <div className="flex flex-col gap-24">
-      <div className="flex justify-center items-center py-24 px-40 border-2 relative">
+    <div className="w-screen md:w-full flex flex-col gap-24">
+      <div className="w-screen flex justify-center items-center py-24 px-40 border-2 relative">
         <div className="flex flex-col justify-center items-center gap-10 z-10">
           <div className="flex flex-col justify-center items-center gap-5">
             <div>
@@ -127,7 +142,7 @@ function App() {
                 Find your block
               </strong>
             </div>
-            <div className="w-[70%] text-center">
+            <div className="w-full md:w-[70%] text-center">
               <h1 className="text-5xl font-bold">
                 Encontre os{" "}
                 <span className="text-purple-700">melhores blocos</span> de
@@ -136,7 +151,7 @@ function App() {
             </div>
           </div>
 
-          <form className="bg-white flex gap-6 drop-shadow-lg p-10 rounded-md">
+          <form className="bg-white flex flex-col md:flex-row gap-8 md:gap-6 drop-shadow-md p-10 rounded-md">
             <Input
               placeholder="Pesquise por nome"
               icon={<MagnifyingGlass size={24} />}
@@ -174,39 +189,38 @@ function App() {
         />
       </div>
 
-      <div className="flex flex-col gap-10 px-28">
-        <div className="flex justify-between items-center">
+      <div className="flex flex-col gap-10 px-0 md:px-28">
+        <div className="flex flex-col lg:flex-row gap-2 justify-between items-center">
           <span className="font-bold text-3xl">Blocos recomendados</span>
 
           <div className="flex gap-3 border-2 rounded-md p-2">
-            <Button placeholder="Lista" />
-            <Button placeholder="Mapa" />
+            <Button placeholder="Lista" onClick={() => setIsOpenMap(false)} />
+            <Button placeholder="Mapa" onClick={() => setIsOpenMap(true)} />
           </div>
         </div>
 
-        <div className="grid grid-cols-3 grid-rows-[auto] gap-8">
-          {filteredBlock.length > 0
-            ? filteredBlock.map((arr, index) => (
-                <Card
-                  city={arr.city}
-                  image={arr.image}
-                  location={arr.location}
-                  subtitle={arr.subtitle}
-                  title={arr.title}
-                  key={index}
+        {isOpenMap ? (
+          <div className="w-full h-96">
+            {isLoaded ? (
+              <GoogleMap
+                mapContainerStyle={{ width: "100%", height: "100%" }}
+                center={position}
+                zoom={15}
+              >
+                <Marker
+                  position={position}
+                  options={{
+                    label: { text: "Posição test", className: "-mt-8" },
+                  }}
                 />
-              ))
-            : blocksRequest.map((arr, index) => (
-                <Card
-                  city={arr.city}
-                  image={arr.image}
-                  location={arr.location}
-                  subtitle={arr.subtitle}
-                  title={arr.title}
-                  key={index}
-                />
-              ))}
-        </div>
+              </GoogleMap>
+            ) : (
+              <></>
+            )}
+          </div>
+        ) : (
+          <ListCard blocksRequest={blocksRequest} filteredBlock={filteredBlock} />
+        )}
       </div>
     </div>
   );

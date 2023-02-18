@@ -10,7 +10,7 @@ export interface CardProps {
 
 export function Card({ image, location, subtitle, title, city }: CardProps) {
  return (
-  <div className="bg-white flex flex-col gap-4 pb-4 rounded-lg overflow-hidden drop-shadow-md">
+  <div className="h-full bg-white flex flex-col gap-4 pb-4 rounded-lg overflow-hidden drop-shadow-md">
    <div className="">
     <img src={image} alt="Imagem do carnaval" className="w-full" />
    </div>
