@@ -17,16 +17,18 @@ Desafios exclusivos, promovido pela Rockeseat. <br/>
 
 </p>
 
-## ⚠ Status
+## ✅ Status
 
- - Em desenvolvimento ⚠
+ - Em produção ✅
 
 ## 👨🏼‍💻 Funções
 
+ - Responsividade 
  - Filtrar por nome 
  - Filtrar por cidade
- - Mapa funcionando
- - Adicionar localização para a cidade selecionada (futura atualização)
+ - API google maps
+ - Mostrar localização no mapa para o estado selecionado
+ - Variáveis de ambiente
 
 ## 🚀 Tecnologias
 
@@ -36,6 +38,7 @@ Esse projeto foi desenvolvido com as seguintes tecnologias:
 - Typescript
 - Tailwindcss
 - Phosphor React
+- Lottie React
 - Git e Github
 
 ## 💻 Projeto

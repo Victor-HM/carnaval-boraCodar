@@ -9,15 +9,17 @@ import Image6 from "./assets/unsplash_b2jkMC95a_8 (5).png";
 import Image7 from "./assets/unsplash_b2jkMC95a_8 (6).png";
 import Image8 from "./assets/unsplash_b2jkMC95a_8 (7).png";
 import Image9 from "./assets/unsplash_b2jkMC95a_8 (8).png";
+import Map from "./assets/map.json";
 
 import { MagnifyingGlass, MapPin } from "phosphor-react";
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button } from "./components/Button";
 import { Input } from "./components/Input";
 import { Select } from "./components/Select";
 import { Card, CardProps } from "./components/Card";
 import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
 import { ListCard } from "./components/ListCards";
+import Lottie from "lottie-react";
 
 function App() {
   const blocksRequest: CardProps[] = [
@@ -95,8 +97,10 @@ function App() {
     },
   ];
 
+  type States = "SP" | "RJ" | "SC" | "PR" | "BA" | "RS" | "";
+
   const [nameBlock, setNameBlock] = useState<string>("");
-  const [selectCity, setSelectCity] = useState<string>("");
+  const [selectCity, setSelectCity] = useState<States>("");
   const [filteredBlock, setFilteredBlock] = useState<CardProps[]>([]);
   const [isOpenMap, setIsOpenMap] = useState<boolean>(false);
 
@@ -107,7 +111,7 @@ function App() {
     function verifyBlocks(value: CardProps) {
       if (
         value.title.toUpperCase().includes(nameBlock.toUpperCase()) &&
-        value.city.includes(selectCity)
+        value.location.includes(selectCity)
       ) {
         return value;
       } else {
@@ -127,10 +131,22 @@ function App() {
     googleMapsApiKey: import.meta.env.VITE_KEY_API,
   });
 
-  const position = {
-    lat: -23.596336,
-    lng: -46.435725,
+
+  const coordenates = {
+    "": { lat: 0, lng: 0 },
+    SP: { lat: -23.6815302, lng: -46.876186 },
+    RJ: { lat: -22.9132513, lng: -43.7268693 },
+    SC: { lat: -27.5707042, lng: -48.751164 },
+    PR: { lat: -25.4947398, lng: -49.4302291 },
+    BA: { lat: -13.3898445, lng: -46.46991 },
+    RS: { lat: -30.1082963, lng: -51.4474199 }
   };
+
+  function changeCoordenates() {
+    return coordenates[selectCity]
+  }
+
+  const position = changeCoordenates()
 
   return (
     <div className="w-screen md:w-full flex flex-col gap-24">
@@ -160,15 +176,18 @@ function App() {
             <Select
               values={[
                 { name: "Selecione uma cidade", value: "" },
-                { name: "São Paulo", value: "São Paulo" },
-                { name: "Florianópolis", value: "Florianópolis" },
-                { name: "Curitiba", value: "Curitiba" },
-                { name: "Salvador", value: "Salvador" },
-                { name: "Rio de Janeiro", value: "Rio de Janeiro" },
-                { name: "Porto Alegre", value: "Porto Alegre" },
+                { name: "São Paulo", value: "SP" },
+                { name: "Florianópolis", value: "SC" },
+                { name: "Curitiba", value: "PR" },
+                { name: "Salvador", value: "BA" },
+                { name: "Rio de Janeiro", value: "RJ" },
+                { name: "Porto Alegre", value: "RS" },
               ]}
               icon={<MapPin size={24} />}
-              onChange={(e) => setSelectCity(e.target.value)}
+              onChange={(e) => {
+                const event = e.target.value as States
+                setSelectCity(event)
+              }}
             />
             <Button
               placeholder="BUSCAR AGORA"
@@ -189,8 +208,8 @@ function App() {
         />
       </div>
 
-      <div className="flex flex-col gap-10 px-0 md:px-28">
-        <div className="flex flex-col lg:flex-row gap-2 justify-between items-center">
+      <div className="flex flex-col items-center  gap-10 px-0 md:px-28">
+        <div className="w-full flex flex-col lg:flex-row gap-2 justify-between items-center">
           <span className="font-bold text-3xl">Blocos recomendados</span>
 
           <div className="flex gap-3 border-2 rounded-md p-2">
@@ -200,26 +219,38 @@ function App() {
         </div>
 
         {isOpenMap ? (
-          <div className="w-full h-96">
+          <div className="w-4/5 md:w-full h-96 flex justify-center">
             {isLoaded ? (
-              <GoogleMap
-                mapContainerStyle={{ width: "100%", height: "100%" }}
-                center={position}
-                zoom={15}
-              >
-                <Marker
-                  position={position}
-                  options={{
-                    label: { text: "Posição test", className: "-mt-8" },
-                  }}
-                />
-              </GoogleMap>
+              selectCity.length > 0 ? (
+                <GoogleMap
+                  mapContainerStyle={{ width: "100%", height: "100%" }}
+                  center={position}
+                  zoom={10}
+                >
+                  <Marker
+                    position={position}
+                    options={{
+                      label: { text: "Posição test", className: "-mt-8" },
+                    }}
+                  />
+                </GoogleMap>
+              ) : (
+                <div className="w-1/2 flex flex-col items-center gap-3">
+                  <span className="text-red-400 text-xl font-bold">
+                    Selecione um local
+                  </span>
+                  <Lottie animationData={Map} />
+                </div>
+              )
             ) : (
               <></>
             )}
           </div>
         ) : (
-          <ListCard blocksRequest={blocksRequest} filteredBlock={filteredBlock} />
+          <ListCard
+            blocksRequest={blocksRequest}
+            filteredBlock={filteredBlock}
+          />
         )}
       </div>
     </div>

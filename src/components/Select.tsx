@@ -10,10 +10,10 @@ interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 
 export function Select({ icon, values, ...rest }: SelectProps) {
   return (
-    <div className="bg-[#F4F4FF] flex items-center gap-3 py-3 px-[14px] focus-within:border-2 focus-within:border-red-400 rounded-md drop-shadow-md">
+    <div className="bg-[#F4F4FF] flex items-center gap-3 px-[14px] focus-within:border-2 focus-within:border-red-400 rounded-md drop-shadow-md">
       <div className="text-red-400">{icon}</div>
       <select
-        className="bg-transparent outline-none border-none appearance-none text-base"
+        className="h-full py-3 bg-transparent outline-none border-none appearance-none text-base"
         {...rest}
       >
        {values.map((arr, index) => (
